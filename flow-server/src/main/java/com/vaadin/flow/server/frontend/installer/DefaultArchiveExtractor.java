@@ -15,7 +15,6 @@
  */
 package com.vaadin.flow.server.frontend.installer;
 
-import io.github.pixee.security.SystemCommand;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -64,7 +63,7 @@ public final class DefaultArchiveExtractor implements ArchiveExtractor {
             throws IOException, ArchiveExtractionException {
         String command = "msiexec /a " + archiveFile.getAbsolutePath()
                 + " /qn TARGETDIR=\"" + destinationDirectory + "\"";
-        Process child = SystemCommand.runCommand(Runtime.getRuntime(), command);
+        Process child = Runtime.getRuntime().exec(command);
         try {
             int result = child.waitFor();
             if (result != 0) {

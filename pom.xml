@@ -146,6 +146,7 @@
         <failsafe.parallel>all</failsafe.parallel>
         <failsafe.threadCount>2</failsafe.threadCount>
         <failsafe.perCoreThreadCount>true</failsafe.perCoreThreadCount>
+        <versions.java-security-toolkit>1.1.3</versions.java-security-toolkit>
     </properties>
 
     <repositories>
@@ -279,6 +280,11 @@
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-all</artifactId>
                 <version>1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.pixee</groupId>
+                <artifactId>java-security-toolkit</artifactId>
+                <version>${versions.java-security-toolkit}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -16,6 +16,7 @@
 
 package com.vaadin.flow.server.frontend;
 
+import io.github.pixee.security.ZipSecurity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -109,8 +110,7 @@ public class CompressUtil {
             return;
         }
         byte[] buffer = new byte[1024];
-        try (ZipInputStream zis = new ZipInputStream(
-                new FileInputStream(zip))) {
+        try (ZipInputStream zis = ZipSecurity.createHardenedInputStream(new FileInputStream(zip))) {
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
                 File newFile = newFile(targetDirectory, zipEntry);

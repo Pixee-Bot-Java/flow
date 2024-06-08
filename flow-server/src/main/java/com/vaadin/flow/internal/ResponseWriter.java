@@ -18,6 +18,7 @@ package com.vaadin.flow.internal;
 
 import static com.vaadin.flow.server.Constants.VAADIN_BUILD_FILES_PATH;
 import static com.vaadin.flow.server.Constants.VAADIN_WEBAPP_RESOURCES;
+import io.github.pixee.security.Newlines;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -278,7 +279,7 @@ public class ResponseWriter implements Serializable {
             }
             setContentLength(response, end - start + 1);
             response.setHeader("Content-Range",
-                    createContentRangeHeader(start, end, resourceLength));
+                    Newlines.stripAll(createContentRangeHeader(start, end, resourceLength)));
 
             final InputStream dataStream = connection.getInputStream();
             try {

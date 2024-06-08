@@ -15,6 +15,7 @@
  */
 package com.vaadin.flow.server.frontend;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +174,7 @@ public class TaskRunDevBundleBuild implements FallibleCommand {
                     new InputStreamReader(process.getInputStream(),
                             StandardCharsets.UTF_8))) {
                 String stdoutLine;
-                while ((stdoutLine = reader.readLine()) != null) {
+                while ((stdoutLine = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                     logger.debug(stdoutLine);
                     toolOutput.append(stdoutLine)
                             .append(System.lineSeparator());

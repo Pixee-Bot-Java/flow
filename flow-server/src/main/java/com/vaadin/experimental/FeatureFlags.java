@@ -48,7 +48,14 @@ import com.vaadin.flow.server.startup.ApplicationConfiguration;
 public class FeatureFlags implements Serializable {
 
     public static final String PROPERTIES_FILENAME = "vaadin-featureflags.properties";
+
+    /**
+     * @deprecated Use {@link #SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL} instead.
+     */
+    @Deprecated
     public static final String SYSTEM_PROPERTY_PREFIX = "vaadin.";
+
+    public static final String SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL = "vaadin.experimental.";
 
     public static final Feature EXAMPLE = new Feature(
             "Example feature. Will be removed once the first real feature flag is added",
@@ -83,6 +90,10 @@ public class FeatureFlags implements Serializable {
             "Internationalization plugin for Copilot", "copilotI18n",
             "https://vaadin.com/docs/latest/tools", false, null);
 
+    public static final Feature COPILOT_EXPERIMENTAL = new Feature(
+            "Copilot experimental features", "copilotExperimentalFeatures",
+            "https://vaadin.com/docs/latest/tools", false, null);
+
     public static final Feature HILLA_FULLSTACK_SIGNALS = new Feature(
             "Hilla Full-stack Signals", "fullstackSignals",
             "https://github.com/vaadin/hilla/discussions/1902", true, null);
@@ -115,6 +126,7 @@ public class FeatureFlags implements Serializable {
         features.add(new Feature(HILLA_FULLSTACK_SIGNALS));
         features.add(new Feature(COPILOT_FLOW));
         features.add(new Feature(COPILOT_I18N));
+        features.add(new Feature(COPILOT_EXPERIMENTAL));
         loadProperties();
     }
 
@@ -211,7 +223,10 @@ public class FeatureFlags implements Serializable {
             // Disable all features if no file exists
             for (Feature f : features) {
                 f.setEnabled(
-                        Boolean.getBoolean(SYSTEM_PROPERTY_PREFIX + f.getId()));
+                        Boolean.getBoolean(SYSTEM_PROPERTY_PREFIX + f.getId())
+                                || Boolean.getBoolean(
+                                        SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL
+                                                + f.getId()));
             }
         } else {
             try (FileInputStream propertiesStream = new FileInputStream(
@@ -241,9 +256,10 @@ public class FeatureFlags implements Serializable {
             for (Feature f : features) {
                 // Allow users to override a feature flag with a system property
                 String propertyValue = System.getProperty(
-                        SYSTEM_PROPERTY_PREFIX + f.getId(),
-                        props.getProperty(getFilePropertyName(f.getId())));
-
+                        SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL + f.getId(),
+                        System.getProperty(SYSTEM_PROPERTY_PREFIX + f.getId(),
+                                props.getProperty(
+                                        getFilePropertyName(f.getId()))));
                 f.setEnabled(Boolean.parseBoolean(propertyValue));
             }
 
@@ -323,7 +339,7 @@ public class FeatureFlags implements Serializable {
     }
 
     private String getSystemPropertyName(String featureId) {
-        return SYSTEM_PROPERTY_PREFIX + featureId;
+        return SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL + featureId;
     }
 
     /**
@@ -395,7 +411,7 @@ public class FeatureFlags implements Serializable {
             Properties filteredSystemProps = new Properties();
             System.getProperties().entrySet().stream()
                     .filter(property -> property.getKey().toString()
-                            .startsWith(SYSTEM_PROPERTY_PREFIX))
+                            .startsWith(SYSTEM_PROPERTY_PREFIX_EXPERIMENTAL))
                     .forEach(property -> filteredSystemProps
                             .put(property.getKey(), property.getValue()));
             checkForUnsupportedFeatureFlags(filteredSystemProps,

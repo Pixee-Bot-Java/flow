@@ -15,6 +15,8 @@
  */
 package com.vaadin.base.devserver.startup;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.annotation.HandlesTypes;
 
 import java.io.File;
@@ -392,11 +394,11 @@ public class DevModeInitializer implements Serializable {
                     String vfsJar = jarVfsMatcher.group(1);
                     if (vfsJars.add(vfsJar)) { // NOSONAR
                         frontendFiles.add(
-                                getPhysicalFileOfJBossVfsJar(new URL(vfsJar)));
+                                getPhysicalFileOfJBossVfsJar(Urls.create(vfsJar, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS)));
                     }
                 } else if (dirVfsMatcher.find()) {
-                    URL vfsDirUrl = new URL(urlString.substring(0,
-                            urlString.lastIndexOf(resourcesFolder)));
+                    URL vfsDirUrl = Urls.create(urlString.substring(0,
+                            urlString.lastIndexOf(resourcesFolder)), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     frontendFiles
                             .add(getPhysicalFileOfJBossVfsDirectory(vfsDirUrl));
                 } else if (jarMatcher.find()) {

@@ -16,6 +16,8 @@
 
 package com.vaadin.flow.server.communication;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -280,7 +282,7 @@ public class UidlWriter implements Serializable {
                     + "But resource is not available via the servlet context. "
                     + "Trying to load '{}' as a URL", url, resolvedPath, url);
             try {
-                stream = new URL(url).openConnection().getInputStream();
+                stream = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openConnection().getInputStream();
             } catch (MalformedURLException exception) {
                 throw new IllegalStateException(String.format(
                         "The path '%s' is not a valid URL. "

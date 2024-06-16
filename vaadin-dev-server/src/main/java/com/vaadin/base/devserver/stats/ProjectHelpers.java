@@ -243,9 +243,7 @@ public class ProjectHelpers {
         if (vaadinHome == null) {
             try {
                 // Create a temp folder for data
-                vaadinHome = File.createTempFile(
-                        StatisticsConstants.VAADIN_FOLDER_NAME,
-                        UUID.randomUUID().toString());
+                vaadinHome = Files.createTempFile(StatisticsConstants.VAADIN_FOLDER_NAME, UUID.randomUUID().toString()).toFile();
                 FileUtils.forceMkdir(vaadinHome);
             } catch (IOException e) {
                 getLogger().debug("Failed to create temp directory ", e);

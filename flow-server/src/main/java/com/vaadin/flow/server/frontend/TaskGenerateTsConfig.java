@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -224,9 +225,7 @@ public class TaskGenerateTsConfig extends AbstractTaskClientGenerator {
                 }
             }
 
-            File backupFile = File.createTempFile(
-                    projectTsConfigFile.getName() + ".", ".bak",
-                    projectTsConfigFile.getParentFile());
+            File backupFile = Files.createTempFile(projectTsConfigFile.getParentFile().toPath(), projectTsConfigFile.getName() + ".", ".bak").toFile();
             FileIOUtils.writeIfChanged(backupFile, projectTsConfigAsString);
             // Project's TS config has a custom content -
             // rewrite and throw an exception with explanations

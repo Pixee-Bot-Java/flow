@@ -18,6 +18,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <component.version>24.3.13</component.version>
         <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
+        <versions.java-security-toolkit>1.2.0</versions.java-security-toolkit>
     </properties>
 
     <dependencyManagement>
@@ -63,6 +64,11 @@
                 <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.pixee</groupId>
+                <artifactId>java-security-toolkit</artifactId>
+                <version>${versions.java-security-toolkit}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -21,6 +21,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ public class PortProber {
         }
     }
 
-    private static final Random random = new Random();
+    private static final Random random = new SecureRandom();
     private static final EphemeralPortRangeDetector ephemeralRangeDetector;
 
     static {

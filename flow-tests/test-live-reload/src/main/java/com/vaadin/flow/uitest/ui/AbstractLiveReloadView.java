@@ -15,6 +15,7 @@
  */
 package com.vaadin.flow.uitest.ui;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import com.vaadin.flow.component.html.Div;
@@ -25,7 +26,7 @@ public abstract class AbstractLiveReloadView extends Div {
     public static final String INSTANCE_IDENTIFIER = "instance-identifier";
     public static final String ATTACH_IDENTIFIER = "attach-identifier";
 
-    private static final Random random = new Random();
+    private static final Random random = new SecureRandom();
 
     private Span attachIdLabel = new Span();
 

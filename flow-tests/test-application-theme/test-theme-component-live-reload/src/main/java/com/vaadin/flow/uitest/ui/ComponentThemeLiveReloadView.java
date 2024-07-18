@@ -16,6 +16,7 @@
 
 package com.vaadin.flow.uitest.ui;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import com.vaadin.flow.component.html.Div;
@@ -31,7 +32,7 @@ public class ComponentThemeLiveReloadView extends Div {
     public static final String ATTACH_IDENTIFIER = "attach-identifier";
     public static final String THEMED_COMPONENT_ID = "themed-component-id";
 
-    private static final Random random = new Random();
+    private static final Random random = new SecureRandom();
 
     private final Span attachIdLabel = new Span();
 

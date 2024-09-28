@@ -15,6 +15,7 @@
  */
 package com.vaadin.flow.spring.security;
 
+import io.github.pixee.security.Newlines;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -106,9 +107,9 @@ public class VaadinSavedRequestAwareAuthenticationSuccessHandler
             if (springCsrfTokenObject instanceof CsrfToken) {
                 CsrfToken springCsrfToken = (CsrfToken) springCsrfTokenObject;
                 response.setHeader(SPRING_CSRF_HEADER,
-                        springCsrfToken.getHeaderName());
+                        Newlines.stripAll(springCsrfToken.getHeaderName()));
                 response.setHeader(SPRING_CSRF_TOKEN,
-                        springCsrfToken.getToken());
+                        Newlines.stripAll(springCsrfToken.getToken()));
             }
         }
     }
@@ -170,7 +171,7 @@ public class VaadinSavedRequestAwareAuthenticationSuccessHandler
 
         if (isTypescriptLogin(request)) {
             response.setHeader(DEFAULT_URL_HEADER,
-                    determineTargetUrl(request, response));
+                    Newlines.stripAll(determineTargetUrl(request, response)));
             if (this.csrfTokenRepository != null) {
                 this.csrfTokenRepository.saveToken(
                         csrfTokenRepository.generateToken(request), request,
@@ -190,7 +191,7 @@ public class VaadinSavedRequestAwareAuthenticationSuccessHandler
                             request.getParameter(targetUrlParameter)))) {
                 this.clearAuthenticationAttributes(request);
                 String targetUrl = savedRequest.getRedirectUrl();
-                response.setHeader(SAVED_URL_HEADER, targetUrl);
+                response.setHeader(SAVED_URL_HEADER, Newlines.stripAll(targetUrl));
                 this.getRedirectStrategy().sendRedirect(request, response,
                         targetUrl);
                 return;
@@ -198,7 +199,7 @@ public class VaadinSavedRequestAwareAuthenticationSuccessHandler
                 this.requestCache.removeRequest(request, response);
             }
         } else if (fullySavedRequestUrl != null) {
-            response.setHeader(SAVED_URL_HEADER, fullySavedRequestUrl);
+            response.setHeader(SAVED_URL_HEADER, Newlines.stripAll(fullySavedRequestUrl));
         }
 
         super.onAuthenticationSuccess(request, response, authentication);

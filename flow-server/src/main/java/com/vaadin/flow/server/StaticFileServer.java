@@ -17,6 +17,7 @@ package com.vaadin.flow.server;
 
 import static com.vaadin.flow.server.Constants.VAADIN_MAPPING;
 import static com.vaadin.flow.server.Constants.VAADIN_WEBAPP_RESOURCES;
+import io.github.pixee.security.Newlines;
 
 import java.io.File;
 import java.io.IOException;
@@ -552,7 +553,7 @@ public class StaticFileServer implements StaticFileHandler {
         } else {
             cacheControl = "public, max-age=0, must-revalidate";
         }
-        response.setHeader("Cache-Control", cacheControl);
+        response.setHeader("Cache-Control", Newlines.stripAll(cacheControl));
     }
 
     /**

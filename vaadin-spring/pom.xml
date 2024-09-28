@@ -174,8 +174,10 @@
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>io.github.pixee</groupId>
+            <artifactId>java-security-toolkit</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

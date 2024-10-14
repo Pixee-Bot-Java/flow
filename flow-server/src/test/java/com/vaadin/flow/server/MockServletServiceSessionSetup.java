@@ -16,6 +16,8 @@ import com.vaadin.flow.server.communication.IndexHtmlRequestListener;
 import com.vaadin.flow.server.communication.IndexHtmlResponse;
 import com.vaadin.flow.shared.ApplicationConstants;
 import com.vaadin.tests.util.MockDeploymentConfiguration;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -183,8 +185,7 @@ public class MockServletServiceSessionSetup {
                                 contents.getBytes(StandardCharsets.UTF_8));
                     }
                 };
-                URL url = new URL(null, "file://" + path,
-                        new URLStreamHandler() {
+                URL url = Urls.create(null, "file://" + path, new URLStreamHandler() {
                             @Override
                             protected URLConnection openConnection(URL u)
                                     throws IOException {
@@ -200,7 +201,7 @@ public class MockServletServiceSessionSetup {
                                     }
                                 };
                             }
-                        });
+                        }, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 Mockito.when(getServletContext().getResource(path))
                         .thenReturn(url);
                 Mockito.when(getServletContext().getResourceAsStream(path))

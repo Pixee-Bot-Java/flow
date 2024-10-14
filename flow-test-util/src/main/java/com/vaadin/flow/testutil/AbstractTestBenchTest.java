@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.testutil;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -118,7 +120,7 @@ public abstract class AbstractTestBenchTest extends TestBenchHelpers {
         if (!serverAvailabilityChecked) {
             String rootUrl = getRootURL();
             try {
-                new URL(rootUrl).openConnection().connect();
+                Urls.create(rootUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openConnection().connect();
             } catch (IOException e) {
                 throw new IllegalStateException(String.format(
                         "Could not connect to %s please check that you have a web server started.",
@@ -463,7 +465,7 @@ public abstract class AbstractTestBenchTest extends TestBenchHelpers {
             Assert.assertEquals(expectedUrl, imageUrl);
         } else if (imageUrl.startsWith("url(")) {
             imageUrl = imageUrl.replaceFirst("url\\(['\"](.*)['\"]\\)", "$1");
-            byte[] actualImage = IOUtils.toByteArray(new URL(imageUrl));
+            byte[] actualImage = IOUtils.toByteArray(Urls.create(imageUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             Assert.assertArrayEquals(expectedImage, actualImage);
         }
     }

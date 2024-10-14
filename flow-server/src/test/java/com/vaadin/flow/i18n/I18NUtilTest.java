@@ -16,6 +16,8 @@
 
 package com.vaadin.flow.i18n;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -191,7 +193,7 @@ public class I18NUtilTest {
         URLStreamHandler wsjarMockHandler = new URLStreamHandler() {
             @Override
             protected URLConnection openConnection(URL url) throws IOException {
-                url = new URL("jar", url.getPath(), url.getFile());
+                url = Urls.create("jar", url.getPath(), url.getFile(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 return url.openConnection();
             }
         };
@@ -209,8 +211,7 @@ public class I18NUtilTest {
                 URL url = super.getResource(name);
                 if (url != null && url.getProtocol().equals("jar")) {
                     try {
-                        return new URL("wsjar", url.getHost(), url.getPort(),
-                                url.getFile(), wsjarMockHandler);
+                        return Urls.create("wsjar", url.getHost(), url.getPort(), url.getFile(), wsjarMockHandler, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
                     }
@@ -291,11 +292,9 @@ public class I18NUtilTest {
                 if (url != null && url.getProtocol().equals("jar")
                         && url.getFile().contains("fake.jar!")) {
                     try {
-                        return new URL("vfs", null, 0,
-                                "/content/my.war/WEB-INF/lib/fake.jar"
+                        return Urls.create("vfs", null, 0, "/content/my.war/WEB-INF/lib/fake.jar"
                                         + url.getFile().replaceFirst(
-                                                ".*fake.jar!", ""),
-                                vfsMockHandler);
+                                                ".*fake.jar!", ""), vfsMockHandler, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
                     }

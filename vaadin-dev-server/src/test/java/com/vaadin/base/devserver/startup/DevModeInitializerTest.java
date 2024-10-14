@@ -5,6 +5,8 @@ import static com.vaadin.flow.server.Constants.CONNECT_JAVA_SOURCE_FOLDER_TOKEN;
 import static com.vaadin.flow.server.Constants.RESOURCES_FRONTEND_DEFAULT;
 import static com.vaadin.flow.server.Constants.RESOURCES_THEME_JAR_DEFAULT;
 import static com.vaadin.flow.server.Constants.TARGET;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
@@ -192,7 +194,7 @@ public class DevModeInitializerTest extends DevModeInitializerTestBase {
                 }
                 return null;
             });
-            URL url = new URL("vfs://some-non-existent-place" + path);
+            URL url = Urls.create("vfs://some-non-existent-place" + path, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
             loadingFsResources_allFilesExist(Collections.singletonList(url),
                     RESOURCES_FRONTEND_DEFAULT);
@@ -547,7 +549,7 @@ public class DevModeInitializerTest extends DevModeInitializerTestBase {
 
     private URL jarUrlBuilder(String url) {
         try {
-            return new URL("jar:" + url);
+            return Urls.create("jar:" + url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

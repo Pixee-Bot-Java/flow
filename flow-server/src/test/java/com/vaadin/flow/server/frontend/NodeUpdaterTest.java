@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -410,8 +411,7 @@ public class NodeUpdaterTest {
     @Test
     public void testGetPlatformPinnedDependencies_onlyVaadinCoreVersionIsPresent_outputContainsOnlyCoreVersions()
             throws IOException {
-        File coreVersionsFile = File.createTempFile("vaadin-core-versions",
-                ".json", temporaryFolder.newFolder());
+        File coreVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-core-versions", ".json").toFile();
         JsonObject mockedVaadinCoreJson = getMockVaadinCoreVersionsJson();
         Assert.assertTrue(mockedVaadinCoreJson.hasKey("core"));
         Assert.assertTrue(
@@ -435,8 +435,7 @@ public class NodeUpdaterTest {
     @Test
     public void testGetPlatformPinnedDependencies_reactNotAvailable_noReactComponents()
             throws IOException, ClassNotFoundException {
-        File coreVersionsFile = File.createTempFile("vaadin-core-versions",
-                ".json", temporaryFolder.newFolder());
+        File coreVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-core-versions", ".json").toFile();
         JsonObject mockedVaadinCoreJson = getMockVaadinCoreVersionsJson();
 
         JsonObject reactComponents = Json.createObject();
@@ -469,10 +468,8 @@ public class NodeUpdaterTest {
     @Test
     public void testGetPlatformPinnedDependencies_reactAvailable_containsReactComponents()
             throws IOException, ClassNotFoundException {
-        File coreVersionsFile = File.createTempFile("vaadin-core-versions",
-                ".json", temporaryFolder.newFolder());
-        File vaadinVersionsFile = File.createTempFile("vaadin-versions",
-                ".json", temporaryFolder.newFolder());
+        File coreVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-core-versions", ".json").toFile();
+        File vaadinVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-versions", ".json").toFile();
         JsonObject mockedVaadinCoreJson = getMockVaadinCoreVersionsJson();
 
         JsonObject reactComponents = Json.createObject();
@@ -525,8 +522,7 @@ public class NodeUpdaterTest {
     @Test
     public void testGetPlatformPinnedDependencies_VaadinAndVaadinCoreVersionsArePresent_outputContainsBothCoreAndCommercialVersions()
             throws IOException {
-        File coreVersionsFile = File.createTempFile("vaadin-core-versions",
-                ".json", temporaryFolder.newFolder());
+        File coreVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-core-versions", ".json").toFile();
         JsonObject mockedVaadinCoreJson = getMockVaadinCoreVersionsJson();
         Assert.assertTrue(mockedVaadinCoreJson.hasKey("core"));
         Assert.assertTrue(
@@ -538,8 +534,7 @@ public class NodeUpdaterTest {
         Mockito.when(finder.getResource(Constants.VAADIN_CORE_VERSIONS_JSON))
                 .thenReturn(coreVersionsFile.toURI().toURL());
 
-        File vaadinVersionsFile = File.createTempFile("vaadin-versions",
-                ".json", temporaryFolder.newFolder());
+        File vaadinVersionsFile = Files.createTempFile(temporaryFolder.newFolder().toPath(), "vaadin-versions", ".json").toFile();
         JsonObject mockedVaadinJson = getMockVaadinVersionsJson();
         Assert.assertFalse(mockedVaadinJson.hasKey("core"));
         Assert.assertTrue(mockedVaadinJson.hasKey("vaadin"));

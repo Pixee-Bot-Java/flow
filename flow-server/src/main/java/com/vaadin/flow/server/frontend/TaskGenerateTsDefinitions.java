@@ -186,9 +186,7 @@ public class TaskGenerateTsDefinitions extends AbstractTaskClientGenerator {
                 UpdateMode updateMode = computeUpdateMode(content);
                 if (updateMode == UpdateMode.UPDATE_AND_BACKUP) {
                     try {
-                        File backupFile = File.createTempFile(
-                                tsDefinitions.getName() + ".", ".bak",
-                                tsDefinitions.getParentFile());
+                        File backupFile = Files.createTempFile(tsDefinitions.getParentFile().toPath(), tsDefinitions.getName() + ".", ".bak").toFile();
                         writeIfChanged(backupFile, content);
                         log().debug("Created {} backup copy on {}",
                                 TS_DEFINITIONS, backupFile);

@@ -16,6 +16,7 @@
 
 package com.vaadin.flow.server.webcomponent;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -221,7 +222,7 @@ public class WebComponentConfigurationRegistryTest {
                     Callable<AtomicBoolean> callable = () -> {
                         // Add random sleep for better possibility to run at
                         // same time
-                        Thread.sleep(new Random().nextInt(200));
+                        Thread.sleep(new SecureRandom().nextInt(200));
                         return new AtomicBoolean(
                                 registry.setConfigurations(createConfigurations(
                                         MyComponentExporter.class)));

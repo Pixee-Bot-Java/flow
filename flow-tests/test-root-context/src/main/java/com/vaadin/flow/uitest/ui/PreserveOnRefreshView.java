@@ -2,6 +2,7 @@ package com.vaadin.flow.uitest.ui;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import com.vaadin.flow.component.AttachEvent;
@@ -26,7 +27,7 @@ public class PreserveOnRefreshView extends Div {
 
     public PreserveOnRefreshView() {
         // create unique content for this instance
-        final String uniqueId = Long.toString(new Random().nextInt());
+        final String uniqueId = Long.toString(new SecureRandom().nextInt());
 
         final Div componentId = new Div();
         componentId.setId(COMPONENT_ID);

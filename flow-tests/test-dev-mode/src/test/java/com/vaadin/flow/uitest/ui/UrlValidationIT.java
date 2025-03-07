@@ -16,6 +16,8 @@
 
 package com.vaadin.flow.uitest.ui;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -58,7 +60,7 @@ public class UrlValidationIT extends ChromeBrowserTest {
     private void sendRequestAndValidateResponseStatusBadRequest(
             String pathToResource) throws Exception {
         final String urlString = getRootURL() + "/view" + pathToResource;
-        URL url = new URL(urlString);
+        URL url = Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");

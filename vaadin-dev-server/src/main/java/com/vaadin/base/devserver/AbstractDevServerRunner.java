@@ -15,6 +15,8 @@
  */
 package com.vaadin.base.devserver;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -603,7 +605,7 @@ public abstract class AbstractDevServerRunner implements DevModeHandler {
             waitForRestart.run();
         }
         // path should have been checked at this point for any outside requests
-        URL uri = new URL(DEV_SERVER_HOST + ":" + getPort() + path);
+        URL uri = Urls.create(DEV_SERVER_HOST + ":" + getPort() + path, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
         connection.setRequestMethod(method);
         connection.setReadTimeout(DEFAULT_TIMEOUT);

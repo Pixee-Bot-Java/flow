@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.server;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -586,13 +588,13 @@ public class VaadinServlet extends HttpServlet {
      */
     static URL getApplicationUrl(HttpServletRequest request)
             throws MalformedURLException {
-        final URL reqURL = new URL((request.isSecure() ? "https://" : "http://")
+        final URL reqURL = Urls.create((request.isSecure() ? "https://" : "http://")
                 + request.getServerName()
                 + ((request.isSecure() && request.getServerPort() == 443)
                         || (!request.isSecure()
                                 && request.getServerPort() == 80) ? ""
                                         : ":" + request.getServerPort())
-                + request.getRequestURI());
+                + request.getRequestURI(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         String servletPath;
         if (request
                 .getAttribute("jakarta.servlet.include.servlet_path") != null) {
@@ -611,7 +613,7 @@ public class VaadinServlet extends HttpServlet {
                 || servletPath.charAt(servletPath.length() - 1) != '/') {
             servletPath = servletPath + "/";
         }
-        URL u = new URL(reqURL, servletPath);
+        URL u = Urls.create(reqURL, servletPath, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         return u;
     }
 

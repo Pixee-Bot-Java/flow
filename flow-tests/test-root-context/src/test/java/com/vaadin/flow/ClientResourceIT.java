@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -67,6 +69,6 @@ public class ClientResourceIT extends ChromeBrowserTest {
 
     private URL getResourceURL(String path) throws MalformedURLException {
         String url = getRootURL() + "/" + path;
-        return new URL(url);
+        return Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     }
 }

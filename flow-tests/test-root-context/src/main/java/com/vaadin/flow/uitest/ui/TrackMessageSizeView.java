@@ -17,6 +17,8 @@
 
 package com.vaadin.flow.uitest.ui;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.vaadin.flow.component.html.Div;
@@ -131,7 +133,7 @@ public class TrackMessageSizeView extends Div {
     private String getFileContent(String filename) {
         URL url = null;
         try {
-            url = new URL(filename);
+            url = Urls.create(filename, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

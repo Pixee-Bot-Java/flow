@@ -1,5 +1,7 @@
 package com.vaadin.viteapp;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -66,8 +68,8 @@ public class FileAccessIT extends ViteDevModeIT {
         if (currentPath.endsWith("/")) {
             currentPath = currentPath.substring(0, currentPath.length() - 1);
         }
-        return new URL("http://localhost:8888/VAADIN/@fs" + currentPath + "/"
-                + fileInProject);
+        return Urls.create("http://localhost:8888/VAADIN/@fs" + currentPath + "/"
+                + fileInProject, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     }
 
 }

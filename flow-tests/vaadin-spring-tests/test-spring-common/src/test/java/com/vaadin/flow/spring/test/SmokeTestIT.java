@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.spring.test;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -70,7 +72,7 @@ public class SmokeTestIT extends AbstractSpringTest {
             throw new IllegalStateException(
                     "URL '" + viewUrl + "' is not available");
         }
-        URL url = new URL(viewUrl);
+        URL url = Urls.create(viewUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         try {
             url.openConnection().connect();
         } catch (IOException exception) {

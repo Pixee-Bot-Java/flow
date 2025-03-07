@@ -3,6 +3,8 @@ package com.vaadin.flow.server;
 import com.vaadin.flow.di.Instantiator;
 import com.vaadin.flow.server.MockServletServiceSessionSetup.TestVaadinServletService;
 import com.vaadin.flow.theme.AbstractTheme;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -221,7 +223,7 @@ public class VaadinServletServiceTest {
      */
     private HttpServletRequest createRequest(String base, String contextPath,
             String servletPath, String pathInfo) throws MalformedURLException {
-        URL url = new URL(base + contextPath + pathInfo);
+        URL url = Urls.create(base + contextPath + pathInfo, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("null.lock", new ReentrantLock()); // for session

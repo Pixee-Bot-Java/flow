@@ -1,5 +1,7 @@
 package com.vaadin.flow.misc.ui;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,7 +17,7 @@ public class CompressedResourceIT extends AbstractParallelTestBenchTest {
 
     @Test
     public void compressedResourcesAreServedCompressed() throws IOException {
-        URL textFileUrl = new URL(getRootURL() + "/textfile.txt");
+        URL textFileUrl = Urls.create(getRootURL() + "/textfile.txt", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection connection = (HttpURLConnection) textFileUrl
                 .openConnection();
         connection.setRequestMethod("GET");

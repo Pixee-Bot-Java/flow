@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.component.page;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -534,7 +536,7 @@ public class Page implements Serializable {
         final String js = "return window.location.href";
         executeJs(js).then(String.class, urlString -> {
             try {
-                callback.accept(new URL(urlString));
+                callback.accept(Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             } catch (MalformedURLException e) {
                 throw new IllegalStateException(
                         "Error while encoding the URL from client", e);

@@ -2,6 +2,7 @@ package com.vaadin.flow.server.frontend;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -13,7 +14,7 @@ public class AbstractTaskClientGeneratorTest {
 
     @Test
     public void writeIfChanged_writesWithChanges() throws Exception {
-        File f = File.createTempFile("writeIfChanged", "aaa");
+        File f = Files.createTempFile("writeIfChanged", "aaa").toFile();
         FileUtils.write(f, TEST_STRING, StandardCharsets.UTF_8);
 
         Assert.assertTrue(FileIOUtils.writeIfChanged(f, TEST_STRING + "2"));
@@ -21,7 +22,7 @@ public class AbstractTaskClientGeneratorTest {
 
     @Test
     public void writeIfChanged_doesNotWriteWithoutChanges() throws Exception {
-        File f = File.createTempFile("writeIfChanged", "aaa");
+        File f = Files.createTempFile("writeIfChanged", "aaa").toFile();
         FileUtils.write(f, TEST_STRING, StandardCharsets.UTF_8);
         Assert.assertFalse(FileIOUtils.writeIfChanged(f, TEST_STRING));
     }

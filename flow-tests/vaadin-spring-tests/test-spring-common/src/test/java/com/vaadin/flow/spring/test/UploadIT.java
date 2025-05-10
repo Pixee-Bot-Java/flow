@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.junit.Assert;
@@ -80,7 +81,7 @@ public class UploadIT extends AbstractSpringTest {
     }
 
     private File createTempFile(String content) throws IOException {
-        File tempFile = File.createTempFile("TestFileUpload", ".txt");
+        File tempFile = Files.createTempFile("TestFileUpload", ".txt").toFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
         writer.write(content);
         writer.close();

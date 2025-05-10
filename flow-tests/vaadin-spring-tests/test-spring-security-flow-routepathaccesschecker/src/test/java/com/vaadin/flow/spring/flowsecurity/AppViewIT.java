@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -215,7 +216,7 @@ public class AppViewIT extends AbstractIT {
         open("private");
         loginUser();
         UploadElement upload = $(UploadElement.class).first();
-        File tmpFile = File.createTempFile("security-flow-image", ".png");
+        File tmpFile = Files.createTempFile("security-flow-image", ".png").toFile();
         InputStream imageStream = getClass().getClassLoader()
                 .getResourceAsStream("image.png");
         IOUtils.copyLarge(imageStream, new FileOutputStream(tmpFile));

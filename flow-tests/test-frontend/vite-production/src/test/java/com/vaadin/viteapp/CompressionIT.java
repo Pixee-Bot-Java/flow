@@ -1,5 +1,7 @@
 package com.vaadin.viteapp;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -20,7 +22,7 @@ public class CompressionIT {
     public void resourcesAvailableAsUncompressed() throws Exception {
         String bundleName = getJsBundleName();
 
-        String file = IOUtils.toString(new URL(getRootURL() + bundleName),
+        String file = IOUtils.toString(Urls.create(getRootURL() + bundleName, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS),
                 StandardCharsets.UTF_8);
         Assert.assertTrue(file.contains("generated-flow-imports"));
     }
@@ -29,7 +31,7 @@ public class CompressionIT {
     public void resourcesAvailableAsBrotli() throws Exception {
         String bundleName = getJsBundleName();
 
-        URL compressedUrl = new URL(getRootURL() + bundleName + ".br");
+        URL compressedUrl = Urls.create(getRootURL() + bundleName + ".br", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         BrotliInputStream stream = new BrotliInputStream(
                 compressedUrl.openStream());
 
@@ -39,7 +41,7 @@ public class CompressionIT {
 
     private String getJsBundleName() throws Exception {
         String indexHtml = IOUtils.toString(
-                new URL(getRootURL() + "/index.html"), StandardCharsets.UTF_8);
+                Urls.create(getRootURL() + "/index.html", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS), StandardCharsets.UTF_8);
         Pattern p = Pattern.compile(".* src=\"./VAADIN/build/([^\"]*).*",
                 Pattern.DOTALL);
 

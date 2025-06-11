@@ -1,5 +1,7 @@
 package com.vaadin.flow.spring.test;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
@@ -40,8 +42,7 @@ public class PathRewritingProxyServlet extends ProxyServlet.Transparent {
             }
 
             try {
-                URL publicURL = new URL(
-                        clientRequest.getRequestURL().toString());
+                URL publicURL = Urls.create(clientRequest.getRequestURL().toString(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 String hostAndBasePath = publicURL.getProtocol() + "://"
                         + publicURL.getHost() + ":" + publicURL.getPort()
                         + prefix + "/";

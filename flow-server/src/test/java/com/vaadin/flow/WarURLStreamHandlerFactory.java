@@ -1,5 +1,7 @@
 package com.vaadin.flow;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -182,7 +184,7 @@ public class WarURLStreamHandlerFactory implements URLStreamHandlerFactory {
                 file = file.replaceFirst("\\^/", "!/");
             }
 
-            return new URL("jar", warUrl.getHost(), warUrl.getPort(), file);
+            return Urls.create("jar", warUrl.getHost(), warUrl.getPort(), file, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         }
     }
 }

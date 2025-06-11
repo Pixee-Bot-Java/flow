@@ -16,6 +16,8 @@
 
 package com.vaadin.flow.servlet;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -52,7 +54,7 @@ public class LowLevelFetchIT extends ChromeBrowserTest {
     }
 
     private String getUrl(String urlString) throws IOException {
-        URL url = new URL(urlString);
+        URL url = Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.connect();
 

@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.pwatest.ui;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -289,7 +291,7 @@ public class PwaTestIT extends ChromeDeviceTest {
     }
 
     private static String readStringFromUrl(String url) throws IOException {
-        return new String(readAllBytes(new URL(url).openStream()),
+        return new String(readAllBytes(Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openStream()),
                 StandardCharsets.UTF_8);
     }
 
@@ -298,7 +300,7 @@ public class PwaTestIT extends ChromeDeviceTest {
     }
 
     private static byte[] readBytesFromUrl(String url) throws IOException {
-        try (InputStream is = new URL(url).openStream()) {
+        try (InputStream is = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openStream()) {
             return readAllBytes(is);
         }
     }

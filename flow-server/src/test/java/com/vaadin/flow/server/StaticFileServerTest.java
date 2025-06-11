@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.server;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
@@ -329,7 +331,7 @@ public class StaticFileServerTest implements Serializable {
             rootAbsolutePath = rootAbsolutePath.substring(0,
                     rootAbsolutePath.length() - 1);
         }
-        final URL folderPath = new URL("file:///" + rootAbsolutePath);
+        final URL folderPath = Urls.create("file:///" + rootAbsolutePath, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
         Mockito.when(servletService.getStaticResource("/frontend"))
                 .thenReturn(folderPath);
@@ -348,17 +350,17 @@ public class StaticFileServerTest implements Serializable {
 
         setupRequestURI("", "", "/frontend/.");
         Mockito.when(servletService.getStaticResource("/frontend/."))
-                .thenReturn(new URL("jar:file:///"
+                .thenReturn(Urls.create("jar:file:///"
                         + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/frontend"));
+                        + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         Assert.assertFalse(
                 "Folder 'frontend' in jar should not be a static resource.",
                 fileServer.serveStaticResource(request, response));
         setupRequestURI("", "", "/file.txt");
         Mockito.when(servletService.getStaticResource("/file.txt"))
-                .thenReturn(new URL("jar:file:///"
+                .thenReturn(Urls.create("jar:file:///"
                         + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/file.txt"));
+                        + "!/file.txt", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         Assert.assertTrue(
                 "File 'file.txt' inside jar should be a static resource.",
                 fileServer.serveStaticResource(request, response));
@@ -388,9 +390,8 @@ public class StaticFileServerTest implements Serializable {
         // Instantiate URL stream handler factory to be able to handle war:
         WarURLStreamHandlerFactory.getInstance();
 
-        final URL folderResourceURL = new URL(
-                "jar:war:" + warFile.toURI().toURL() + "!/"
-                        + archiveFile.getName() + "!/frontend");
+        final URL folderResourceURL = Urls.create("jar:war:" + warFile.toURI().toURL() + "!/"
+                        + archiveFile.getName() + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
         setupRequestURI("", "", "/frontend/.");
         Mockito.when(servletService.getStaticResource("/frontend/."))
@@ -425,15 +426,15 @@ public class StaticFileServerTest implements Serializable {
 
         setupRequestURI("", "", "/frontend/.");
         Mockito.when(servletService.getStaticResource("/frontend/."))
-                .thenReturn(new URL("jar:" + warFile.toURI().toURL() + "!/"
-                        + archiveFile.getName() + "!/frontend"));
+                .thenReturn(Urls.create("jar:" + warFile.toURI().toURL() + "!/"
+                        + archiveFile.getName() + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         Assert.assertTrue(
                 "Request should return as static request as we can not determine non file resources in jar files.",
                 fileServer.serveStaticResource(request, response));
         setupRequestURI("", "", "/file.txt");
         Mockito.when(servletService.getStaticResource("/file.txt"))
-                .thenReturn(new URL("jar:" + warFile.toURI().toURL() + "!/"
-                        + archiveFile.getName() + "!/file.txt"));
+                .thenReturn(Urls.create("jar:" + warFile.toURI().toURL() + "!/"
+                        + archiveFile.getName() + "!/file.txt", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         Assert.assertTrue(
                 "Request should return as static request as we can not determine non file resources in jar files.",
                 fileServer.serveStaticResource(request, response));
@@ -492,13 +493,12 @@ public class StaticFileServerTest implements Serializable {
         Path tempArchive = generateZipArchive(folder);
 
         final FileSystem fileSystem = FileSystems
-                .newFileSystem(new URL("jar:file:///"
-                        + tempArchive.toString().replaceAll("\\\\", "/") + "!/")
+                .newFileSystem(Urls.create("jar:file:///"
+                        + tempArchive.toString().replaceAll("\\\\", "/") + "!/", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS)
                         .toURI(), Collections.emptyMap());
 
-        final URL folderResourceURL = new URL(
-                "jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/frontend");
+        final URL folderResourceURL = Urls.create("jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
+                        + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
         try {
             fileServer.getFileSystem(folderResourceURL.toURI());
@@ -520,13 +520,11 @@ public class StaticFileServerTest implements Serializable {
 
         Path tempArchive = generateZipArchive(folder);
 
-        final URL folderResourceURL = new URL(
-                "jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/frontend");
+        final URL folderResourceURL = Urls.create("jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
+                        + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
-        final URL fileResourceURL = new URL(
-                "jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/file.txt");
+        final URL fileResourceURL = Urls.create("jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
+                        + "!/file.txt", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 
         fileServer.getFileSystem(folderResourceURL.toURI());
         fileServer.getFileSystem(fileResourceURL.toURI());
@@ -564,9 +562,8 @@ public class StaticFileServerTest implements Serializable {
         Path tempArchive = generateZipArchive(folder);
 
         setupRequestURI("", "", "/frontend/.");
-        final URL folderResourceURL = new URL(
-                "jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/frontend");
+        final URL folderResourceURL = Urls.create("jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
+                        + "!/frontend", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         Mockito.when(servletService.getStaticResource("/frontend/."))
                 .thenReturn(folderResourceURL);
 
@@ -616,9 +613,8 @@ public class StaticFileServerTest implements Serializable {
         }
 
         setupRequestURI("", "", "/file.txt");
-        final URL fileResourceURL = new URL(
-                "jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
-                        + "!/file.txt");
+        final URL fileResourceURL = Urls.create("jar:file:///" + tempArchive.toString().replaceAll("\\\\", "/")
+                        + "!/file.txt", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         Mockito.when(servletService.getStaticResource("/file.txt"))
                 .thenReturn(fileResourceURL);
 

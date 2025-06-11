@@ -15,6 +15,8 @@
  */
 package com.vaadin.flow.testutil;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -77,7 +79,7 @@ public class ChromeDeviceTest extends ViewOrUITest {
         if (Browser.CHROME == getRunLocallyBrowser()) {
             driver = new ChromeDriver(chromeOptions);
         } else {
-            URL remoteURL = new URL(getHubURL());
+            URL remoteURL = Urls.create(getHubURL(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             driver = new RemoteWebDriver(remoteURL, chromeOptions);
             setDevToolsRuntimeCapabilities((RemoteWebDriver) driver, remoteURL);
         }

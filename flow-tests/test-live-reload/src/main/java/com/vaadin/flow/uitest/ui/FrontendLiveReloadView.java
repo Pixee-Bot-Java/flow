@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 
@@ -91,8 +92,7 @@ public class FrontendLiveReloadView extends AbstractLiveReloadView {
         try {
             if (frontendFileBackup == null) {
                 // make a backup so it can be restored at teardown
-                frontendFileBackup = File.createTempFile(
-                        FrontendUtils.DEFAULT_FRONTEND_DIR, "ts");
+                frontendFileBackup = Files.createTempFile(FrontendUtils.DEFAULT_FRONTEND_DIR, "ts").toFile();
                 FileUtils.copyFile(frontendFile, frontendFileBackup);
             }
             FileUtils.write(frontendFile, code, StandardCharsets.UTF_8);

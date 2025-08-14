@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.vaadin.flow.testutil.TestUtils;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -32,7 +33,7 @@ public abstract class AbstractStatisticsTest {
             throws IOException {
         File original = new File(
                 TestUtils.getTestResource(testResourceName).getFile());
-        File result = File.createTempFile("test", "json");
+        File result = Files.createTempFile("test", "json").toFile();
         result.deleteOnExit();
         FileUtils.copyFile(original, result);
         return result;
@@ -41,8 +42,7 @@ public abstract class AbstractStatisticsTest {
     @Before
     public void setup() throws Exception {
         storage = Mockito.spy(new StatisticsStorage());
-        storage.usageStatisticsFile = File.createTempFile("test-storage",
-                "json");
+        storage.usageStatisticsFile = Files.createTempFile("test-storage", "json").toFile();
         sender = Mockito.spy(new StatisticsSender(storage));
         Mockito.doAnswer(answer -> null).when(sender)
                 .triggerSendIfNeeded(Mockito.any());
